@@ -1,6 +1,6 @@
 import requests
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 import pytz
 from flask import Flask
 import threading
@@ -36,15 +36,10 @@ def home():
 # تشغيل السيرفر في Thread منفصل
 threading.Thread(target=lambda: app.run(host="0.0.0.0", port=3000)).start()
 
-# ===== حلقة النشر اليومي =====
+# ===== حلقة النشر كل 15 ثانية (للتجريب) =====
 while True:
-    now = datetime.now(egypt_tz)
-    target_time = now.replace(hour=22, minute=0, second=0, microsecond=0)
-    if now >= target_time:
-        target_time += timedelta(days=1)
-
-    wait_seconds = (target_time - now).total_seconds()
-    print(f"⏳ الانتظار {int(wait_seconds)} ثانية حتى الساعة 10 مساءً...")
+    wait_seconds = 15
+    print(f"⏳ الانتظار {wait_seconds} ثانية...")
     time.sleep(wait_seconds)
 
     img_url = images[current_index]
