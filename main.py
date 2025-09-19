@@ -48,7 +48,9 @@ while True:
     time.sleep(wait_seconds)
 
     img_url = images[current_index]
-    print(f"📤 جاري رفع الصورة {current_index + 1}...")
+    print(f"📤 جاري رفع الصورة {current_index + 1} كـ Post...")
+
+    # ===== نشر الصورة كـ Post =====
     create_url = f"https://graph.facebook.com/v17.0/{instagram_account_id}/media"
     payload = {
         "image_url": img_url,
@@ -64,8 +66,24 @@ while True:
             "creation_id": creation_id,
             "access_token": access_token
         })
-        print(f"✅ الصورة {current_index + 1} اترفعت بنجاح:", r2.json())
+        print(f"✅ الصورة {current_index + 1} نزلت كـ Post بنجاح:", r2.json())
     else:
-        print(f"❌ حصل خطأ مع الصورة {current_index + 1}:", result)
+        print(f"❌ حصل خطأ مع الـ Post:", result)
 
+    # ===== نشر الصورة كـ Story =====
+    print(f"📲 جاري رفع الصورة {current_index + 1} كـ Story...")
+    story_url = f"https://graph.facebook.com/v17.0/{instagram_account_id}/media"
+    story_payload = {
+        "image_url": img_url,
+        "is_story": "true",
+        "access_token": access_token
+    }
+    r3 = requests.post(story_url, data=story_payload)
+    story_result = r3.json()
+    if "id" in story_result:
+        print(f"✅ الصورة {current_index + 1} نزلت كـ Story بنجاح:", story_result)
+    else:
+        print(f"❌ حصل خطأ مع الـ Story:", story_result)
+
+    # التكرار للصور
     current_index = (current_index + 1) % len(images)
